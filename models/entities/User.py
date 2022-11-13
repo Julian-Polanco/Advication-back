@@ -51,6 +51,8 @@ class UserEdit():
             'last name': self.last_name,
             'email': self.email,
         }
+
+
 class UserAdmin():
     def __init__(self, id, full_name, email, role) -> None:
         self.id = id
@@ -64,4 +66,18 @@ class UserAdmin():
             'full_name': self.full_name,
             'email': self.email,
             'role': self.role
+        }
+
+
+class UserStudent():
+    def __init__(self, id, full_name, email) -> None:
+        self.id = id
+        self.full_name = full_name
+        self.email = email
+
+    def to_JSON(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'email': self.email,
         }

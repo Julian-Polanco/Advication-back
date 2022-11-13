@@ -1,9 +1,7 @@
 from flask import Blueprint, jsonify, request
 from werkzeug.security import generate_password_hash
 
-# Entities
 from models.entities.User import User
-# Models
 from models.UserModel import UserModel
 
 main = Blueprint('auth_blueprint', __name__)

@@ -53,7 +53,7 @@ class AdviceEdit():
         self.date = date
         self.start_time = start_time
         self.end_time = end_time
-        
+
     def to_JSON(self):
         return {
             'topic': self.topic,
@@ -89,6 +89,7 @@ class AdviceList():
             'teacherName': self.teacherName
         }
 
+
 class AdviceSchedule():
 
     def __init__(self, id_advice, id_student, time_advice) -> None:
@@ -103,17 +104,28 @@ class AdviceSchedule():
             'time_advice': self.time_advice
         }
 
-# class AdviceTimesTaken():
 
-#     def __init__(self) -> None:
-#         self.time_advice = []
+class AdviceReport():
+    def __init__(self, id, topic, subject_name, description, date, start_time, end_time,  teacher_name, students) -> None:
+        self.id = id
+        self.topic = topic
+        self.subject_name = subject_name
+        self.description = description
+        self.date = date
+        self.start_time = start_time
+        self.end_time = end_time
+        self.teacher_name = teacher_name
+        self.students = students
 
-#     def add_new_arrival(self, time_advice):
-#         self.time_advice.append(time_advice)
-
-#     def to_JSON(self):
-#         return {
-#             'time_advice': self.time_advice
-#         }
-#     def to_String(self):
-#         return self.time_advice
+    def to_JSON(self):
+        return{
+            'id': self.id,
+            'topic': self.topic,
+            'description': self.description,
+            'date': self.date,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'subject_name': self.subject_name,
+            'teacher_name': self.teacher_name,
+            'students': self.students
+        }

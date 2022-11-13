@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-# Entities
 from models.entities.Advice import Advice, AdviceSchedule
-# Models
 from models.AdviceModel import AdviceModel
 
 main = Blueprint('advice_blueprint', __name__)
@@ -68,8 +66,6 @@ def get_advice_schedule():
         return jsonify(status=500, message=str(ex), method='get-advice-schedule'), 500
 
 
-
-
 @main.route('/get-all-advices-teacher/<id>', methods=['GET'])
 def get_all_advices_teacher(id):
     try:
@@ -85,5 +81,16 @@ def delete_advice():
         id_advice = request.json['id_advice']
         response = AdviceModel.delete_advice(id_advice)
         return response
+    except Exception as ex:
+        return jsonify(status=500, message=str(ex), method='delete-advice'), 500
+
+@main.route('/reports', methods=['GET'])
+def reports():
+    try:
+        response = AdviceModel.addvice_report()
+        if response is None:
+            return jsonify(status=404, message='No hay datos', method='reports'), 404
+        else:
+            return jsonify(status=200, message='Reporte generado', data=response, method='reports'), 200
     except Exception as ex:
         return jsonify(status=500, message=str(ex), method='delete-advice'), 500

@@ -1,9 +1,9 @@
 from flask import jsonify
 from database.db import get_connection
-from .entities.Advice import AdviceJoin, AdviceEdit, AdviceList
+from .entities.Advice import AdviceReport, AdviceList
+from .entities.User import UserStudent
 from werkzeug.security import check_password_hash
-import numpy as np
-import json
+
 
 class AdviceModel():
 
@@ -183,5 +183,41 @@ class AdviceModel():
                 response = jsonify(
                 status = 200, message='Advice deleted successfully'), 200
             return response
+        except Exception as ex:
+            raise Exception(ex)
+
+
+    
+    @classmethod
+    def addvice_report(self):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """SELECT a.id, a.topic, s.name, a.description, CAST(a.date AS TEXT), CAST(a.start_time AS TEXT), CAST(a.end_time AS TEXT), (u.first_name ||' '||u.last_name)as teacher
+	                    FROM public.advices a
+	                    inner join users u on a.id_teacher = u.id 
+	                    inner join subjects s on a.id_subject = s.id;""")
+                result = cursor.fetchall()
+            advices = []
+            for advice in result:
+                advices.append(
+                    AdviceReport(advice[0], advice[1], advice[2], advice[3], advice[4], advice[5], advice[6], advice[7],'student').to_JSON()
+                )
+            for advice in advices:
+                with connection.cursor() as cursor2:
+                    cursor2.execute(
+                        """ SELECT u.id, (u.first_name ||' '||u.last_name) as student, u.email
+                            FROM public."AdviceSchedule" a
+                            inner join users u on a.id_student = u.id 
+                            WHERE a.id_advice=%s;""", (advice['id'],))
+                    result2 = cursor2.fetchall()
+                students = []
+                for student in result2:
+                    students.append(
+                        UserStudent(student[0],student[1],student[2]).to_JSON()
+                    )
+                advice['students'] = students
+            return advices
         except Exception as ex:
             raise Exception(ex)
