@@ -19,12 +19,12 @@ class User():
 
 class userJoin():
 
-    def __init__(self, id, first_name, last_name, email, rol) -> None:
+    def __init__(self, id, first_name, last_name, email, role) -> None:
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.role = rol
+        self.role = role
 
     def to_JSON(self):
         return {
@@ -50,4 +50,18 @@ class UserEdit():
             'fist name': self.first_name,
             'last name': self.last_name,
             'email': self.email,
+        }
+class UserAdmin():
+    def __init__(self, id, full_name, email, role) -> None:
+        self.id = id
+        self.full_name = full_name
+        self.email = email
+        self.role = role
+
+    def to_JSON(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'email': self.email,
+            'role': self.role
         }

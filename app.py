@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 
 # Routes
 from routes.auth import Auth
-from routes.room import Room
+from routes.subject import Subject
 from routes.user import User
 from routes.Advice import Advice
 
@@ -28,7 +28,7 @@ def index():
 
 # Routes
 app.register_blueprint(Auth.main, url_prefix='/auth')
-app.register_blueprint(Room.main, url_prefix='/room')
+app.register_blueprint(Subject.main, url_prefix='/subject')
 app.register_blueprint(User.main, url_prefix='/user')
 app.register_blueprint(Advice.main, url_prefix='/advice')
 

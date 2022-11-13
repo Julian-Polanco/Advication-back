@@ -110,7 +110,7 @@ class AdviceModel():
                 )
             hours = AdviceModel.hourInterval(timeAdvice[0][0], timeAdvice[0][1], timeTaken)
             if hours == []:
-                hours.append("No hay horas disponibles")
+                hours.append("No hay horarios disponibles")
             response = jsonify(
                     status = 200, message='list of hours',data=hours), 200
             connection.close()
@@ -136,3 +136,52 @@ class AdviceModel():
                 hours.append(completeHour)
         return hours
    
+    @classmethod
+    def get_all_advices_teacher(self,id):
+        try:
+            connection = get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """ SELECT a.id, a.topic, s.name, a.description, CAST(a.date AS TEXT), CAST(a.start_time AS TEXT), CAST(a.end_time AS TEXT), (u.first_name ||' '||u.last_name)as teacher
+	                    FROM public.advices a
+	                    inner join users u on a.id_teacher = u.id 
+	                    inner join subjects s on a.id_subject = s.id
+                        WHERE u.id=%s;
+	                    """, (id,))
+                result = cursor.fetchall()
+            advices = []
+            for advice in result:
+                advices.append(
+                    AdviceList(advice[0], advice[1], advice[2], advice[3], advice[4], advice[5], advice[6], advice[7]).to_JSON()
+                )
+            response = jsonify(
+                    status = 409, message='There are not advices availables'), 409
+            if advices != []:
+                response = jsonify(
+                status = 200, message='list of advices',data=advices), 200
+            connection.close()
+            return response
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def delete_advice(self,id):
+        try:
+            connection = get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """ DELETE FROM public.advices
+                        WHERE id=%s;""", (id,))
+                affected_rows = cursor.rowcount
+            connection.commit()
+            connection.close()
+            response = jsonify(
+                status = 409, message='Advice not deleted'), 409
+            if affected_rows != None:
+                response = jsonify(
+                status = 200, message='Advice deleted successfully'), 200
+            return response
+        except Exception as ex:
+            raise Exception(ex)

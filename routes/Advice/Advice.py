@@ -52,7 +52,7 @@ def set_advice():
         return response
 
     except Exception as ex:
-        return jsonify(status=500, message=str(ex), method='add-advice'), 500
+        return jsonify(status=500, message=str(ex), method='set-advice'), 500
 
 @main.route('/get-advice-schedule', methods=['POST'])
 def get_advice_schedule():
@@ -65,5 +65,25 @@ def get_advice_schedule():
         return response
 
     except Exception as ex:
-        return jsonify(status=500, message=str(ex), method='add-advice'), 500
+        return jsonify(status=500, message=str(ex), method='get-advice-schedule'), 500
 
+
+
+
+@main.route('/get-all-advices-teacher/<id>', methods=['GET'])
+def get_all_advices_teacher(id):
+    try:
+        response = AdviceModel.get_all_advices_teacher(id)
+        return response
+    except Exception as ex:
+        return jsonify(status=500, message=str(ex), method='get-all-advices-teacher'), 500
+
+
+@main.route('/delete-advice', methods=['POST'])
+def delete_advice():
+    try:
+        id_advice = request.json['id_advice']
+        response = AdviceModel.delete_advice(id_advice)
+        return response
+    except Exception as ex:
+        return jsonify(status=500, message=str(ex), method='delete-advice'), 500
